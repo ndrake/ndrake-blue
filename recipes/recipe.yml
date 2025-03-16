@@ -43,6 +43,6 @@ modules:
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
 
   - type: akmods
-    base: extra # if not specified, classic "main" base is used by default
+    base: main # if not specified, classic "main" base is used by default
     install:
       - rtl88xxau
