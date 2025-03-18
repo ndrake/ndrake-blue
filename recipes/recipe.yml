@@ -23,6 +23,12 @@ modules:
   #  install:
   #    - micro
   #    - starship
+  - type: rpm-ostree
+    install:
+      - kernel
+      - kernel-core
+      - kernel-modules
+      - kernel-modules-core
   
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
 
