@@ -1,40 +1,39 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-# image will be published to ghcr.io/<user>/<name>
 name: ndrake-blue
-# description will be included in the image's metadata
 description: This is my personal OS image.
 
-# the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/bluefin-dx
-image-version: latest # latest is also supported if you want new updates ASAP
+image-version: latest
 
-# module configuration, executed in order
-# you can include multiple instances of the same module
 modules:
-  #- type: files
-  #  files:
-  #    - source: system
-  #      destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
-
-  #- type: rpm-ostree
-  #  repos:
-  #    - https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-%OS_VERSION%/atim-starship-fedora-%OS_VERSION%.repo
-  #  install:
-  #    - micro
-  #    - starship
+  - type: signing
+  
   - type: rpm-ostree
     install:
-      - kernel
-      - kernel-core
-      - kernel-modules
-      - kernel-modules-core
+      - kmodtool
+      - akmods
+      - dkms
       - kernel-devel
-      - kernel-headers
-  
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
 
-  - type: akmods
-    install:
-      - rtl88xxau
-
+  - type: script
+    script: |
+      #!/bin/bash
+      set -exo pipefail
+      
+      # Download rtl88xxau source
+      cd /tmp
+      git clone https://github.com/aircrack-ng/rtl8812au.git rtl88xxau
+      cd rtl88xxau
+      
+      # Get current kernel version that's actually in use
+      KERNEL_VERSION=$(rpm -q --qf '%{VERSION}-%{RELEASE}.%{ARCH}' kernel)
+      echo "Building for kernel version: $KERNEL_VERSION"
+      
+      # Build and install the module for current kernel
+      make
+      make install
+      
+      # Create kmod package
+      cd /usr/lib/modules/$(uname -r)/extra/
+      modinfo rtl88xxau || echo "Module not found"
