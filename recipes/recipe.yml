@@ -7,7 +7,7 @@ description: This is my personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/bluefin-dx
-image-version: stable # latest is also supported if you want new updates ASAP
+image-version: latest # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -25,14 +25,16 @@ modules:
   #    - starship
   - type: rpm-ostree
     install:
-      - kmodtool
+      - kernel
+      - kernel-core
+      - kernel-modules
+      - kernel-modules-core
+      - kernel-devel
+      - kernel-headers
   
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
 
   - type: akmods
     install:
       - rtl88xxau
-    options:
-      # Explicitly use current kernel
-      kernel-version: "6.12.13-200.fc41.x86_64"
-      keep-kernel-modules: true
+
