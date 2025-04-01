@@ -13,7 +13,10 @@ dnf group install -y "development-tools"
 rm -rf "$SRC_DIR"
 git clone https://github.com/lwfinger/rtl8852au "$SRC_DIR"
 
-ls -l /lib/modules
+echo "Clone complete!"
+
+echo $(ls -l /lib/modules)
+
 
 # Create a DKMS configuration file
 cat <<EOF > "$SRC_DIR/dkms.conf"
