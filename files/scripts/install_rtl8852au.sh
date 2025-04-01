@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 DRIVER_NAME="rtl8852au"
@@ -7,8 +6,7 @@ DRIVER_VERSION="1.0"
 SRC_DIR="/usr/src/$DRIVER_NAME-$DRIVER_VERSION"
 
 # Install dependencies
-apt update
-apt install -y dkms build-essential linux-headers-$(uname -r) git
+dnf install -y dkms kernel-devel kernel-headers git make gcc
 
 # Clone the driver source
 rm -rf "$SRC_DIR"
@@ -31,6 +29,6 @@ dkms build -m "$DRIVER_NAME" -v "$DRIVER_VERSION"
 dkms install -m "$DRIVER_NAME" -v "$DRIVER_VERSION"
 
 # Ensure the module loads on boot
-echo "8852au" | tee -a /etc/modules
+echo "8852au" | tee -a /etc/modules-load.d/8852au.conf
 
 echo "Driver installation completed successfully!"
