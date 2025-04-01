@@ -15,3 +15,7 @@ modules:
       - akmods
       - dkms
       - kernel-devel
+
+  - type: script
+    scripts:
+    - install_rtl8852au.sh # example: run config/scripts/myscript.sh
