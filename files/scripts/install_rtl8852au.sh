@@ -16,7 +16,13 @@ git clone https://github.com/lwfinger/rtl8852au "$SRC_DIR"
 echo "Clone complete!"
 
 echo $(ls -l /lib/modules)
+ARCH="$(rpm -E '%_arch')"
+KERNEL="$(rpm -q "${KERNEL_NAME}" --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+RELEASE="$(rpm -E '%fedora')"
 
+echo "Arch: $ARCH"
+echo "Kernel: $KERNEL"
+echo "Release: $RELEASE"
 
 # Create a DKMS configuration file
 cat <<EOF > "$SRC_DIR/dkms.conf"
