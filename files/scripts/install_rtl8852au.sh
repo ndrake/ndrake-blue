@@ -7,7 +7,7 @@ SRC_DIR="/usr/src/$DRIVER_NAME-$DRIVER_VERSION"
 
 # Install dependencies
 dnf install -y dkms kernel-devel kernel-headers git make gcc
-dnf group install -y "C Development Tools and Libraries"
+dnf group install -y "development-tools"
 
 # Clone the driver source
 rm -rf "$SRC_DIR"
